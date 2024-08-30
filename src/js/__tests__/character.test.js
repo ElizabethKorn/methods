@@ -2,12 +2,15 @@ import Character from "../character";
 
 test("initial values", () => {
   const character = new Character("Person", "Swordsman");
-  expect(character.name).toBe("Person");
-  expect(character.type).toBe("Swordsman");
-  expect(character.health).toBe(100);
-  expect(character.level).toBe(1);
-  expect(character.attack).toBe(10);
-  expect(character.defence).toBe(10);
+  const correct = {
+    name: "Person",
+    type: "Swordsman",
+    health: 100,
+    level: 1,
+    attack: 10,
+    defence: 10,
+  };
+  expect(character).toEqual(correct);
 });
 
 test("should throw an error for invalid name length", () => {
@@ -27,16 +30,19 @@ test("should throw an error for invalid character type", () => {
 
 test("levelUp increases level and stats", () => {
   const character = new Character("Person", "Swordsman");
-  const initialAttack = character.attack;
-  const initialDefence = character.defence;
   character.levelUp();
-  expect(character.level).toBe(2);
-  expect(character.attack).toBeCloseTo(initialAttack * 1.2);
-  expect(character.defence).toBeCloseTo(initialDefence * 1.2);
-  expect(character.health).toBe(100);
+  const correct = {
+    name: "Person",
+    type: "Swordsman",
+    health: 100,
+    level: 2,
+    attack: 10 * 1.2,
+    defence: 10 * 1.2,
+  };
+  expect(character).toEqual(correct);
 });
 
-test("levelUp raises error if dead", () => {
+test("should not level up dead character", () => {
   const character = new Character("Person", "Swordsman");
   character.health = 0;
   expect(() => character.levelUp()).toThrow(
@@ -49,7 +55,7 @@ test("damage reduces health", () => {
   const initialHealth = character.health;
   character.damage(10);
   const expectedHealth = initialHealth - 10 * (1 - character.defence / 100);
-  expect(character.health).toBeCloseTo(expectedHealth);
+  expect(character.health).toBe(expectedHealth);
 });
 
 test("damage does not go below zero", () => {
